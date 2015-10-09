@@ -1,4 +1,3 @@
-package shoes
 
 import com.twitter.scalding._
 import cascading.pipe.Pipe
@@ -13,11 +12,11 @@ class ProdRecByPrice (args:Args) extends Job(args){
  
  
    //master
-  val prodPrice = List( (111, 1500F,1200F),
-                        (222, 1600F,1400F),
-                        (777, 1200F,1000F),
-                        (444, 1200F,1050F),
-                        (333, 700F,650F)
+  val prodPrice = List( (111, "1500",1200F),
+                        (222, "1600",1400F),
+                        (777, "1200",1000F),
+                        (444, "1200",1050F),
+                        (333, "700",650F)
                       )
                       /*
   //sqooped data                      
@@ -35,9 +34,10 @@ class ProdRecByPrice (args:Args) extends Job(args){
   .flatMap('poducts -> 'pid_){y:String => y.split(",")}
   .map('pid_ -> 'pid__){x:String => x.toInt}  //pid , category
   
-  val prodPricePipe = IterableSource[((Int,Float,Float))](prodPrice, ('pid,'maxprice, 'minprice)).read 
+  val prodPricePipe = IterableSource[((Int,String,Float))](prodPrice, ('pid,'maxprice, 'minprice)).read 
+  .map(('maxprice)->('maxprice_)) { x:String => {  ( x.toFloat ) }}
  
-  .map(('maxprice, 'minprice)->('avgPrice)) {x:(String,String) => val(maxPrice,minPrice) = x 
+  .map(('maxprice_, 'minprice)->('avgPrice)) {x:(String,String) => val(maxPrice,minPrice) = x 
     (( maxPrice.toFloat + minPrice.toFloat)/2)    //average price
     }
    .joinWithSmaller('pid -> 'pid__,  prodRecomPipe) //join Recomm => ProductPrice
