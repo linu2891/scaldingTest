@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>packt-book</groupId>
+    <artifactId>programming-map-reduce-with-scalding</artifactId>
+    <version>0</version>
+  </parent>
+  <artifactId>assignment</artifactId>
+  <name>Scalding assignments Bidisha - Intermediate Examples</name>
+  
+  <dependencies>
+
+        <!-- When using Joda library in Scala import both libraries: joda-time and joda-convert -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.joda</groupId>
+            <artifactId>joda-convert</artifactId>
+            <version>1.5</version>
+        </dependency>
+
+        <!-- JSON -->
+        <dependency>
+            <groupId>com.cloudphysics</groupId>
+            <artifactId>jerkson_2.10</artifactId>
+            <version>0.6.3</version>
+        </dependency>
+
+        <!-- Cascading 'Driven' monitoring tool -->
+        <dependency>
+            <groupId>driven</groupId>
+            <artifactId>driven-plugin</artifactId>
+            <version>1.0-eap-59</version>
+            <classifier>io</classifier>
+        </dependency>
+
+    </dependencies>
+</project>

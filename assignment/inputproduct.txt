@@ -1,0 +1,4 @@
+"PD1"	"LEVIS"	"SKINFIT"	"M"	"CL"	"SH"	"FR"	"B"
+"PD2"	"LEVIS"	"SKINFIT"	"F"	"CL"	"SH"	"CA"	"P"  
+"PD3"	"LEVIS"	"SKINFIT"	"M"	"CL"	"TR"	"FR"	"R"
+"PD4"	"LEVIS"	"SKINFIT"	"M"	"CL"	"TR"	"FR"	"P"
