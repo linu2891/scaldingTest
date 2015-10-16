@@ -3,6 +3,7 @@ import com.twitter.scalding._
 import cascading.pipe.Pipe
 import cascading.pipe.joiner.{OuterJoin, RightJoin, LeftJoin}
 import com.twitter.scalding.FunctionImplicits._
+import scalaz.IsEmpty
 
 /**
  * @author wcbdd
@@ -65,7 +66,7 @@ import ReccomSchema._
    */
         
   .map(('maxprice, 'minprice)->('avgPrice)) {x:(String,String) => val(maxPrice,minPrice) = x 
-    ((( maxPrice.toFloat + minPrice.toFloat)/2))   
+    ((( toDouble(maxPrice) + toDouble(minPrice))/2))   
     }.project('pidPrice,'avgPrice)
                                                                 
   /**                                                             
@@ -98,9 +99,19 @@ import ReccomSchema._
    .write(Tsv( args("output")))
       
    
-  
+ def toDouble(s: String): Double = {
+  try {
+    s.toDouble
+  } catch {
+    case e: NumberFormatException => 0
+  }
+}
+   
+
  
 }
+
+
 
    //master
  /* val prodPrice = List( (111, "1500",1200F),
