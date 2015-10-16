@@ -32,7 +32,7 @@ import StringUtils._
   * category                   poductList
   *"CLOTHING|FORMALS|SHIRT",   "111,222,777"         
   *
-  *   flatten column  TO 
+  * flatten column  TO 
   *
   * pidRecomm   Category   
   * 111,      "CLOTHING|FORMALS|SHIRT"                                                                                
@@ -42,7 +42,7 @@ import StringUtils._
   
   
   
-  val prodRecomPipe =     Csv( args("prodRecommInput"),"," ,prodRecomSchema ).read 
+  val prodRecomPipe =     Csv( args("prodRecommInput"),"," ,PROD_RECCOM_SCHEMA ).read 
   .flatMap('poducts -> 'pidRecomm){y:String => y.split(",")}
   .project('pidRecomm,'category)
                                                                    
@@ -54,7 +54,7 @@ import StringUtils._
   *    111,       1500 ,     1200
   */    
   
-  val prodPricePipe = Csv( args("prodPriceInput"),"," ,prodPriceSchema ).read
+  val prodPricePipe = Csv( args("prodPriceInput"),"," ,PROD_PRICE_SCHEMA ).read
   
                                                                   
   /**                                                               

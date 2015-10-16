@@ -5,9 +5,9 @@
  */
 object ReccomSchema {
    val prodCatalogSchema = List ('pid, 'brand,'style,'gender,'typ1,'typ2,'typ3,'color)
- val prodRecomSchema = List('category, 'poducts)
+ val PROD_RECCOM_SCHEMA = List('category, 'poducts)
  
  
-  val prodPriceSchema = List('pidPrice,'maxprice, 'minprice)
+  val PROD_PRICE_SCHEMA = List('pidPrice,'maxprice, 'minprice)
  
 }
