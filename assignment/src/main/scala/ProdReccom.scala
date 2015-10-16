@@ -1,4 +1,4 @@
-package shoes
+
 import com.twitter.scalding._
 /**
  * @author t
