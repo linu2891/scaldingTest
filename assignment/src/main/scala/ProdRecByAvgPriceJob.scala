@@ -1,0 +1,57 @@
+
+import com.twitter.scalding.Args
+import com.twitter.scalding.Csv
+import com.twitter.scalding.Job
+import com.twitter.scalding.Tsv
+
+
+
+
+/**
+ * @author wcbdd
+ * 
+ * Re-rank the category-based recommendations based on price 
+ * (defined as avg. of min/max either one nullable) asc., 
+ * and retain only upto top N (say, N = 3) recommendations.
+ * 
+ * recomm    = "CLOTHING|FORMALS|SHIRT",   "111,222,777"           
+ * prodPrice = 111, 1500,1200
+ */
+ 
+ 
+
+class ProdRecByPriceJob (args:Args) extends Job(args){
+
+import ReccomSchema._ 
+import StringUtils._
+import ProductReccomStats._            
+   
+  
+  val prodRecomPipe =     Csv( args("prodRecommInput"),"," ,PROD_RECCOM_SCHEMA ).read 
+  .getReccomByProd
+                                                                   
+ 
+  
+  val prodPricePipe = Csv( args("prodPriceInput"),"," ,PROD_PRICE_SCHEMA ).read                                                                
+
+  .calProdAvgPrice    
+   
+   .joinWithSmaller('pidPrice -> 'pidRecomm,  prodRecomPipe )                                                               
+ 
+   .getTopProdsByAvgPrice
+   
+   .getReccomProdList 
+   
+   .debug
+   .write(Tsv( args("output")))
+      
+   
+ 
+   
+
+ 
+}
+
+
+
+   
