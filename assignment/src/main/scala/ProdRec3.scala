@@ -30,7 +30,7 @@ class ProdRec3 (args:Args) extends Job(args){
   
   val prodRecomPipe =     IterableSource[((String, String))](prodRecom, ('category, 'poducts)).read
   val prodPipe = IterableSource[((Int, String,String, String,String, String,String, String))](prodCatalog, ('pid, 'brand,'style,'gender,'typ1,'typ2,'typ3,'color)).read
-  .filter('gender){ f:String => f == "MALE"}
+  .filter('gender){ gender:String => gender == "MALE"}
   .project('pid,'typ1,'typ2,'typ3)  
   .map( ('typ1,'typ2,'typ3) -> 'category_){x:(String,String,String) => val(typ1,typ2,typ3) = x 
     s"$typ1|$typ2|$typ3"}
