@@ -22,6 +22,7 @@ import scalaz.IsEmpty
 class ProdRecByPrice (args:Args) extends Job(args){
  
 import ReccomSchema._ 
+import StringUtils._
                    
    
   
@@ -99,13 +100,7 @@ import ReccomSchema._
    .write(Tsv( args("output")))
       
    
- def toDouble(s: String): Double = {
-  try {
-    s.toDouble
-  } catch {
-    case e: NumberFormatException => 0
-  }
-}
+ 
    
 
  

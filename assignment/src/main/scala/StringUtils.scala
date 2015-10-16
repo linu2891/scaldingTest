@@ -9,5 +9,15 @@ object StringUtils {
          import scala.util.control.Exception._
          def toIntOpt = catching(classOf[NumberFormatException]) opt s.toInt
          def toDoubleOpt = catching(classOf[NumberFormatException]) opt s.toDouble
+         
+         
      }
+  
+  def toDouble(s: String): Double = {
+  try {
+    s.toDouble
+  } catch {
+    case e: NumberFormatException => 0
+  }
+}
 }
