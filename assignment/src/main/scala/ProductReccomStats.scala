@@ -3,6 +3,17 @@ import cascading.pipe.Pipe
 
 /**
  * @author wcbdd
+ * 1. Filter the bad records and put method to filter the bad records
+ * 2. Define all attrib(field names) in schema
+ * 3. Declare Pipes as Pipes
+ * 4. Data - Make this atleast 500
+ * 5. Product Data can have more columns - Product Name , Desc - 100 [This will help to project re-ranking better]
+ * 6. Unit test cases for the program - Keep in similar package as the main code
+ * 7. Create package keep the code 
+ * 8. Remove hard coding
+ * 
+ * 
+ * 
  */
 trait ProductReccomStats {
   
@@ -13,7 +24,7 @@ import scala.language.implicitConversions
  import StringUtils._
 
   def pipe: Pipe
-  
+  val maxPrice = "maxprice"
   /**          
   *
   * flatten products list "111,222,777"  TO 
@@ -28,7 +39,7 @@ import scala.language.implicitConversions
  */
  def getReccomByProd : Pipe =
   pipe 
-  .flatMap('poducts -> 'pidRecomm){y:String => y.split(",")}
+  .flatMap('poducts -> 'pidRecomm){recommednedProdLst:String => recommednedProdLst.split(",")}
   .project('pidRecomm,'category)
   
   
@@ -43,7 +54,7 @@ import scala.language.implicitConversions
  */
  def calProdAvgPrice : Pipe =
   pipe        
-  .map(('maxprice, 'minprice)->('avgPrice)) {x:(String,String) => val(maxPrice,minPrice) = x 
+  .map((maxPrice, 'minprice)->('avgPrice)) {x:(String,String) => val(maxPrice,minPrice) = x 
     ((( toDouble(maxPrice) + toDouble(minPrice))/2))   
     }.project('pidPrice,'avgPrice)
     
@@ -64,10 +75,10 @@ import scala.language.implicitConversions
  * INPUT_SCHEMA: PROD_RECCOM_SCHEMA
  * OUTPUT_SCHEMA: RECCOM_BY_PRODUCT_SCHEMA
  */
- def getTopProdsByAvgPrice : Pipe =
+ def getTopProdsByAvgPrice(str: Int) : Pipe =
   pipe 
   .project('pidPrice,'avgPrice,'category)   
-   .groupAll { _.sortBy('avgPrice).reverse.take(3)     }
+   .groupAll { _.sortBy('avgPrice).reverse.take(str)     }
   
  /**          
  *

@@ -3,6 +3,7 @@ import com.twitter.scalding.Args
 import com.twitter.scalding.Csv
 import com.twitter.scalding.Job
 import com.twitter.scalding.Tsv
+import cascading.pipe.Pipe
 
 
 
@@ -22,12 +23,11 @@ import com.twitter.scalding.Tsv
 
 class ProdRecByPriceJob (args:Args) extends Job(args){
 
-import ReccomSchema._ 
-import StringUtils._
+import ReccomSchema._
 import ProductReccomStats._            
    
   
-  val prodRecomPipe =     Csv( args("prodRecommInput"),"," ,PROD_RECCOM_SCHEMA ).read 
+  val prodRecomPipe : Pipe =     Csv( args("prodRecommInput"),"," ,PROD_RECCOM_SCHEMA ).read 
   .getReccomByProd
                                                                    
  
@@ -38,7 +38,7 @@ import ProductReccomStats._
    
    .joinWithSmaller('pidPrice -> 'pidRecomm,  prodRecomPipe )                                                               
  
-   .getTopProdsByAvgPrice
+   .getTopProdsByAvgPrice(3)
    
    .getReccomProdList 
    
