@@ -27,26 +27,23 @@ import ReccomSchema._
 import ProductReccomStats._            
    
   
-  val prodRecomPipe : Pipe =     Csv( args("prodRecommInput"),"," ,PROD_RECCOM_SCHEMA ).read 
-  .getReccomByProd
+  val recomPipe : Pipe =     Csv( args("prodRecommInput"),"," ,PROD_RECCOM_SCHEMA ).read 
+  .getReccomByProd.addTrap(Tsv( args("errorReccomRecords")))
                                                                    
  
   
-  val prodPricePipe = Csv( args("prodPriceInput"),"," ,PROD_PRICE_SCHEMA ).read                                                                
+  val prodPricePipe  : Pipe = Csv( args("prodPriceInput"),"," ,PROD_PRICE_SCHEMA ).read                                                        
 
-  .calProdAvgPrice    
+  .calProdAvgPrice.addTrap(Tsv( args("errorPriceRecords")))    
    
-   .joinWithSmaller('pidPrice -> 'pidRecomm,  prodRecomPipe )                                                               
+  .joinWithSmaller('pidPrice -> 'pidRecomm,  recomPipe )                                                               
  
-   .getTopProdsByAvgPrice(3)
-   
-   .getReccomProdList 
-   
-   .debug
+  .getTopProdsByAvgPrice(2) 
+    
+ 
    .write(Tsv( args("output")))
       
    
- 
    
 
  

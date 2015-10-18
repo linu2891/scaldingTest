@@ -27,7 +27,9 @@ import scala.language.implicitConversions
   val maxPrice = "maxprice"
   /**          
   *
-  * flatten products list "111,222,777"  TO 
+  * flatten products list 
+  *
+  * Eg:  "111,222,777"  TO 
   *
   * pidRecomm   Category   
   * 111,      "CLOTHING|FORMALS|SHIRT"                                                                                
@@ -75,28 +77,16 @@ import scala.language.implicitConversions
  * INPUT_SCHEMA: PROD_RECCOM_SCHEMA
  * OUTPUT_SCHEMA: RECCOM_BY_PRODUCT_SCHEMA
  */
- def getTopProdsByAvgPrice(str: Int) : Pipe =
+ def getTopProdsByAvgPrice(top: Int) : Pipe =
   pipe 
-  .project('pidPrice,'avgPrice,'category)   
-   .groupAll { _.sortBy('avgPrice).reverse.take(str)     }
+  .project('avgPrice,'pidPrice,'category)   
+   .groupBy('category) { _.sortedReverseTake[(Double,String)](( 'avgPrice,'pidPrice) -> 'top, top) } 
+   .map('top -> 'pidList){ topList : List[(Double,String)] => topList.foldLeft("")((accum,tuple) => if(accum.isEmpty())tuple._2; else accum +","+tuple._2 )}
+   .project('category,'pidList)
+    
+     .debug   
   
- /**          
- *
- * Get top products based on average price 
- * INPUT_SCHEMA: PROD_AVG_PRICE_SCHEMA, RECCOM_BY_PRODUCT_SCHEMA
- * OUTPUT_SCHEMA: RECCOM_BY_PRODUCT_SCHEMA
- */
- def getTopProdsByAvgPrice(prodPricePipe: Pipe, prodReccomPipe: Pipe, top:Int) : Pipe = {
-  
-    prodPricePipe.joinWithSmaller('pidPrice -> 'pidRecomm,  prodReccomPipe ) 
-   .project('pidPrice,'avgPrice,'category)
-   .debug                                                               
-    /**                                                           
-     * sort by avgprice and take first 3                           
-     */
-   .groupAll { _.sortBy('avgPrice).reverse.take(top)     }
-  }
-  
+
   
  /**          
  *   
